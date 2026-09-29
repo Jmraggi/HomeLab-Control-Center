@@ -15,6 +15,13 @@ The dashboard monitors a mock `Dell Inspiron N4010` host and presents system hea
 - Local mock provider for development without a server
 - Remote-provider architecture with automatic mock fallback
 - Runtime validation of future agent payloads with Zod
+- Dedicated System, Docker, Services, Network and Settings views
+- Container search and status filters, chart metric selection, and manual refresh
+- Accessible mobile navigation, loading states, and retry after failed requests
+
+Network currently lists service ports only; traffic, latency and interface metrics
+remain unavailable until a future agent provides them. Data-source badges are
+shown independently per panel so partial fallback is visible.
 
 ## Stack
 

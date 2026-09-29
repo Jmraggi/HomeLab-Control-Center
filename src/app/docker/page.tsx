@@ -1,2 +1,8 @@
-import { SectionPage } from "@/components/layout/section-page";
-export default function DockerPage() { return <SectionPage title="Docker" description="Manage and inspect containers from a single workspace." />; }
+import { DashboardShell } from "@/components/layout/dashboard-shell";
+import { OverviewContent } from "@/components/overview/overview-content";
+import { getDashboardData } from "@/lib/dashboard-data";
+
+export default async function DockerPage() {
+  const initialData = await getDashboardData();
+  return <DashboardShell activeItem="Docker"><OverviewContent view="Docker" initialData={initialData} /></DashboardShell>;
+}

@@ -1,2 +1,8 @@
-import { SectionPage } from "@/components/layout/section-page";
-export default function ServicesPage() { return <SectionPage title="Services" description="Track the availability of services exposed by your home lab." />; }
+import { DashboardShell } from "@/components/layout/dashboard-shell";
+import { OverviewContent } from "@/components/overview/overview-content";
+import { getDashboardData } from "@/lib/dashboard-data";
+
+export default async function ServicesPage() {
+  const initialData = await getDashboardData();
+  return <DashboardShell activeItem="Services"><OverviewContent view="Services" initialData={initialData} /></DashboardShell>;
+}

@@ -1,7 +1,22 @@
-import { CheckCircle2, Clock3, Laptop } from "lucide-react";
+"use client";
+
+import { Clock3, Server } from "lucide-react";
+import { useI18n } from "@/components/layout/language-provider";
 import type { ProviderMetadata } from "@/providers/system-provider";
 import type { SystemStats } from "@/types/system";
+import { SourceBadge } from "./source-badge";
 
-function sourceLabel(metadata: ProviderMetadata) { return metadata.fallback ? "Fallback" : metadata.source === "remote" ? "Live" : "Mock Data"; }
-
-export function SystemStatusCard({ system, metadata }: { system: SystemStats; metadata: ProviderMetadata }) { return <section className="overflow-hidden rounded-2xl border border-cyan-300/12 bg-gradient-to-br from-cyan-400/10 via-[#101925] to-[#101720] p-5 sm:p-6"><div className="flex flex-col justify-between gap-6 md:flex-row md:items-center"><div className="flex items-start gap-4"><div className="grid size-11 place-items-center rounded-xl bg-cyan-400/15 text-cyan-300"><Laptop size={22} /></div><div><div className="flex flex-wrap items-center gap-2"><h2 className="text-lg font-semibold text-white">{system.machineName}</h2><span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-0.5 text-xs font-medium text-emerald-300"><CheckCircle2 size={12} />Online</span><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${metadata.fallback ? "bg-amber-400/10 text-amber-300" : metadata.source === "remote" ? "bg-cyan-400/10 text-cyan-300" : "bg-slate-400/10 text-slate-300"}`}>{sourceLabel(metadata)}</span></div><p className="mt-1 font-mono text-sm text-slate-400">{system.hostname}</p></div></div><div className="flex items-center gap-3 rounded-xl border border-white/7 bg-black/15 px-4 py-3"><Clock3 size={18} className="text-cyan-300" /><div><p className="text-xs uppercase tracking-wider text-slate-500">Uptime</p><p className="mt-0.5 text-sm font-medium text-slate-200">{system.uptime.days} days, {system.uptime.hours} hours</p></div></div></div></section>; }
+export function SystemStatusCard({ system, metadata }: { system: SystemStats; metadata: ProviderMetadata }) {
+  const { t } = useI18n();
+  return <section className="panel relative flex flex-col justify-between gap-5 p-6 sm:flex-row sm:items-center">
+    <div className="flex min-w-0 items-center gap-4">
+      <span className="grid size-13 shrink-0 place-items-center rounded-xl border border-[#87e5c12b] bg-[#87e5c108] text-[#87e5c1]"><Server size={25} /></span>
+      <div className="min-w-0"><p className="eyebrow mb-2">{t("primaryHost")}</p><h2 className="truncate text-lg font-medium">{system.machineName}</h2><p className="mt-1 font-mono text-[11px] text-slate-400">{system.hostname}</p></div>
+    </div>
+    <div className="flex flex-wrap items-center gap-4">
+      <div className="mr-2"><p className="eyebrow mb-2 flex items-center gap-2"><Clock3 size={12} />{t("uptime")}</p><p className="text-sm tabular-nums">{system.uptime.days}d <span className="text-slate-400">{system.uptime.hours}h</span></p></div>
+      <span className={`pill ${system.status === "online" ? "pill-green" : "pill-amber"}`}><span className="size-1.5 rounded-full bg-current" />{system.status === "online" ? t("online") : t("offline")}</span>
+      <SourceBadge metadata={metadata} />
+    </div>
+  </section>;
+}

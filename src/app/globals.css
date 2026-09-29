@@ -1,6 +1,46 @@
 @import "tailwindcss";
-:root { --background: #070b13; --foreground: #e2e8f0; }
+:root { --background: #0b0e13; --foreground: #e5e9ee; color-scheme: dark; }
 @theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --font-sans: var(--font-geist); }
 * { box-sizing: border-box; }
-body { background: radial-gradient(circle at 85% -10%, rgba(8, 145, 178, .14), transparent 26rem), var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
-::selection { background: rgba(34, 211, 238, .28); }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-geist), Arial, sans-serif; }
+button, a, input, select { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; opacity: .5; }
+:focus-visible { outline: 2px solid #87e5c1; outline-offset: 4px; }
+::selection { background: #87e5c133; }
+@layer components {
+.panel { border: 1px solid #262d37; border-radius: 16px; background: #12171e; overflow: hidden; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 24px; }
+.eyebrow { color: #85919f; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .16em; }
+.muted { color: #94a0af; }
+.pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #333c47; border-radius: 6px; padding: 4px 8px; font-size: 11px; white-space: nowrap; }
+.pill-green { background: #87e5c10b; border-color: #87e5c12b; color: #87e5c1; }
+.pill-amber { background: #e7b56b0b; border-color: #e7b56b30; color: #e7b56b; }
+.control { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #303944; border-radius: 8px; background: #171e27; padding: 9px 13px; color: #d9e1ea; font-size: 12px; }
+.control:hover { background: #232d38; }
+.field { border: 1px solid #303944; border-radius: 8px; background: #0e131a; color: #e5e9ee; padding: 10px 12px; font-size: 13px; min-width: 0; }
+.data-table { width: 100%; text-align: left; font-size: 12px; white-space: nowrap; }
+.data-table th { padding: 13px 24px; background: #0e131a; color: #8996a5; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; font-weight: 500; }
+.data-table td { padding: 19px 24px; border-top: 1px solid #242c36; }
+.data-table tbody tr:hover { background: #ffffff03; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Phone typography is intentionally larger than the dense desktop workspace. */
+@media (max-width: 639px) {
+  .dashboard-shell { --text-xs: 0.875rem; --text-xs--line-height: 1.5; --text-sm: 1rem; --text-sm--line-height: 1.5; }
+  .dashboard-shell [class~="text-[10px]"] { font-size: 0.75rem; line-height: 1.5; }
+  .dashboard-shell [class~="text-[11px]"] { font-size: 0.875rem; line-height: 1.5; }
+  .dashboard-shell [class~="text-[13px]"] { font-size: 0.9375rem; line-height: 1.5; }
+  .dashboard-shell .eyebrow { font-size: 0.75rem; letter-spacing: .1em; }
+  .dashboard-shell .pill { font-size: 0.8125rem; padding: 5px 9px; }
+  .dashboard-shell .control { min-height: 44px; min-width: 44px; font-size: 0.9375rem; }
+  .dashboard-shell .field,
+  .dashboard-shell input,
+  .dashboard-shell select { font-size: 16px; min-height: 44px; }
+  .dashboard-shell .panel-heading { padding: 20px; flex-wrap: wrap; }
+  .dashboard-shell #main-content { padding: 24px 16px; }
+  .dashboard-shell header { padding-left: 16px; padding-right: 16px; }
+  .dashboard-shell #mobile-navigation a { min-height: 48px; }
+  .dashboard-shell footer { padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+}

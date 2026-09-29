@@ -1,3 +1,22 @@
-import { ArrowUpRight, Radio } from "lucide-react";
+"use client";
+
+import { House, Play, Terminal, Radio } from "lucide-react";
+import { useI18n } from "@/components/layout/language-provider";
 import type { Service } from "@/types/system";
-export function ServicesPanel({ services }: { services: readonly Service[] }) { return <section className="rounded-2xl border border-white/7 bg-[#0d1420] p-5"><div className="flex items-center justify-between"><div><h2 className="font-semibold text-white">Services</h2><p className="mt-1 text-xs text-slate-500">Local endpoints</p></div><Radio size={18} className="text-cyan-300" /></div><div className="mt-5 divide-y divide-white/6">{services.map((service) => <div key={service.name} className="flex items-center justify-between py-3 first:pt-0 last:pb-0"><div className="flex items-center gap-3"><span className="size-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(74,222,128,.8)]" /><div><p className="text-sm font-medium text-slate-200">{service.name}</p><p className="mt-0.5 text-xs text-slate-500">{service.port ? `Port ${service.port}` : "No port reported"}</p></div></div><ArrowUpRight size={16} className="text-slate-600" /></div>)}</div></section>; }
+import type { ProviderMetadata } from "@/providers/system-provider";
+import { SourceBadge } from "./source-badge";
+
+export function ServicesPanel({ services, metadata }: { services: readonly Service[]; metadata?: ProviderMetadata }) {
+  const online = services.filter(service => service.status === "online").length;
+  const { t } = useI18n();
+  return <section className="panel">
+    <div className="panel-heading"><div><h2 className="text-sm font-medium">{t("services")}</h2><p className="mt-1 text-[11px] text-slate-400">{online} {t("of")} {services.length} {t("available")}</p></div>{metadata && <SourceBadge metadata={metadata} />}</div>
+    <div className="px-6">{services.map(service => {
+      const Icon = service.name === "Home Assistant" ? House : service.name === "Plex" ? Play : service.name === "SSH" ? Terminal : Radio;
+      return <div key={service.name} className="flex items-center justify-between gap-3 border-t border-[#262d37] py-5">
+        <div className="flex min-w-0 items-center gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg border border-[#303944] bg-[#1b232d] text-slate-300"><Icon size={16} /></span><div><p className="text-xs font-medium">{service.name}</p><p className="mt-1 font-mono text-[10px] text-slate-400">{service.port ? `PORT ${service.port}` : t("noPort")}</p></div></div>
+        <span className={`flex items-center gap-1.5 text-[10px] ${service.status === "online" ? "text-[#87e5c1]" : "text-[#e7b56b]"}`}><span className="size-1.5 rounded-full bg-current" />{service.status === "online" ? t("online") : t("offline")}</span>
+      </div>;
+    })}{!services.length && <p className="py-10 text-sm text-slate-400">{t("noServices")}</p>}</div>
+  </section>;
+}
